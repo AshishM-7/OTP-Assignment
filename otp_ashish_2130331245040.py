@@ -1,5 +1,4 @@
-OOP
-
+# UML
 
 
 
@@ -46,21 +45,22 @@ class Email:
         else:
             print("Please enter a valid email!!")
 
-class OTPServices(Mobile, Email):
+class OTPServices:
     def _init_(self, account_sid, auth_token, twilio_num, sender_email, sender_password):
-        super()._init_()
         self.client = Client(account_sid, auth_token)
         self.twilio_num = twilio_num
         self.sender_email = sender_email
         self.sender_password = sender_password
+        self.mobile_service = Mobile()
+        self.email_service = Email()
 
     def send_otp(self, receiver_email, send_twilio=True, target_mobile=None):
         generated_otp = self.generate_otp(6)
 
         if send_twilio:
-            self.send_otp_over_mobile(self.client, self.twilio_num, target_mobile, generated_otp)
+            self.mobile_service.send_otp_over_mobile(self.client, self.twilio_num, target_mobile, generated_otp)
 
-        self.send_otp_over_email(self.sender_email, self.sender_password, receiver_email, generated_otp)
+        self.email_service.send_otp_over_email(self.sender_email, self.sender_password, receiver_email, generated_otp)
 
     @staticmethod
     def generate_otp(n=6):
